@@ -10,7 +10,7 @@ class CPU {
 
     private:
         /* Memory address space */
-        cpu_byte address_space[ADDRESS_SPACE_SIZE];
+        cpu_word address_space[ADDRESS_SPACE_SIZE];
 
         /* Four general purpose registers R0 - R3 */
         cpu_word reg [N_REGISTERS];
@@ -35,7 +35,7 @@ class CPU {
         CPU();
         ~CPU();
         void run();
-        void load_rom(cpu_byte *rom, int rom_size);
+        void load_rom(cpu_word *rom, int rom_size);
 };
 
 #endif

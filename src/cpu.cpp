@@ -7,21 +7,21 @@ CPU::CPU() {
     flags = 0;
 
     /* Clear memory space */
-    memset(address_space, 0, sizeof(cpu_byte)*ADDRESS_SPACE_SIZE);
+    memset(address_space, 0, sizeof(cpu_word)*ADDRESS_SPACE_SIZE);
 }
 
 CPU::~CPU() {
 
 }
 
-void CPU::load_rom(cpu_byte *rom, int rom_size) {
+void CPU::load_rom(cpu_word *rom, int rom_size) {
     //TODO: Check if rom too big!
     memcpy(address_space, rom, rom_size);
 
     #ifdef DEBUG_LOADROM
         std::cout << "---------- LOADED PROM -----------" << std::endl;
-        for (int i = 0; i < rom_size; i++){
-            std::cout << "mem(" << i << ") = " << std::bitset<8>(address_space[i]) << std::endl;
+        for (int i = 0; i < rom_size/sizeof(cpu_word); i++){
+            std::cout << "mem(" << i << ") = " << std::bitset<16>(address_space[i]) << std::endl;
         }
         std::cout << "-------- END LOADED PROM ---------" << std::endl;
     #endif
@@ -44,8 +44,12 @@ void CPU::run() {
 bool CPU::execute_instruction(cpu_word data) {
 
     /* HALT command returns 1 */
-    if (data == HLT) return true;
-
+    if (data == HLT) {
+        #ifdef DEBUG
+            std::cout << "[DBG] EXECUTION HALTED" << std::endl;
+        #endif
+        return true;
+    }
     /* NOP */
     if (data == NOP) op_nop();
 
