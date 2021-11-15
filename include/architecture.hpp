@@ -1,0 +1,7 @@
+#ifndef ARCHITECTURE_HPP
+#define ARCHITECTURE_HPP
+
+#define ADDRESS_SPACE_SIZE 65536
+#define N_REGISTERS 4
+
+#endif
