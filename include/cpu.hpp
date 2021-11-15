@@ -3,7 +3,6 @@
 
 #include "structures.hpp"
 #include "architecture.hpp"
-#include "opcodes.hpp"
 #include "debugger.hpp"
 
 class CPU {
@@ -13,7 +12,7 @@ class CPU {
         cpu_word address_space[ADDRESS_SPACE_SIZE];
 
         /* Four general purpose registers R0 - R3 */
-        cpu_word reg [N_REGISTERS];
+        cpu_word reg[N_REGISTERS];
 
         /* FLAGS register */
         cpu_word flags;
@@ -29,7 +28,27 @@ class CPU {
 
         bool execute_instruction(cpu_word d);
 
+        /* Immediate commands */
         void op_nop();
+
+        /* Single-register opcodes */
+        void op_clear(cpu_word data);
+        void op_increment(cpu_word data);
+        void op_decrement(cpu_word data);
+        void op_not(cpu_word data);
+        void op_push(cpu_word data);
+        void op_pop(cpu_word data);
+
+        /* Double-register opcodes */
+        void op_add(cpu_word data);
+        void op_subtract(cpu_word data);
+        void op_leftshift(cpu_word data);
+        void op_rightshift(cpu_word data);
+        void op_and(cpu_word data);
+        void op_or(cpu_word data);
+        void op_xor(cpu_word data);
+        void op_exchange(cpu_word data);
+        void op_move(cpu_word data);
 
     public:
         CPU();
