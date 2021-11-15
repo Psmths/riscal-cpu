@@ -4,6 +4,7 @@
 #include "structures.hpp"
 #include "architecture.hpp"
 #include "debugger.hpp"
+#include "flags.hpp"
 
 class CPU {
 
@@ -39,7 +40,10 @@ class CPU {
         void op_push(cpu_word data);
         void op_pop(cpu_word data);
 
+        void op_jump_ne(cpu_word data);
+
         /* Double-register opcodes */
+        void op_compare(cpu_word data);
         void op_add(cpu_word data);
         void op_subtract(cpu_word data);
         void op_leftshift(cpu_word data);
@@ -49,6 +53,10 @@ class CPU {
         void op_xor(cpu_word data);
         void op_exchange(cpu_word data);
         void op_move(cpu_word data);
+
+        /* Data commands */
+        void op_move_upper(cpu_word data);
+        void op_move_lower(cpu_word data);
 
     public:
         CPU();

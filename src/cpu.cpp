@@ -1,8 +1,8 @@
 #include "../include/cpu.hpp"
 #include "operation_exec.cpp"
+#include <iostream>
 
 #ifdef DEBUG
-    #include <iostream>
     #include <bitset>
 #endif
 
@@ -45,6 +45,7 @@ void CPU::run() {
 
         #ifdef DEBUG
             std::cout << "PC: " << std::bitset<16>(pc) << " (" << pc << ")" << "\tmem(" << pc << ") = " << std::bitset<16>(data) << std::endl;
+            std::cout << "FLAGS: " << std::bitset<16>(flags) << std::endl;
             for (int i = 0; i < 4; i++){
                 std::cout << "R" << i << ": " << std::bitset<16>(reg[i]) << " (" << reg[i] << ")" << std::endl;
             }
@@ -64,9 +65,14 @@ bool CPU::execute_instruction(cpu_word data) {
     }
 
     if (data == 0x0) op_nop();
-    if (data > 0x00000010 && data < 0x0000001F) op_clear(data);
-    if (data > 0x00000020 && data < 0x0000002F) op_increment(data);
-    if (data > 0x00000030 && data < 0x0000003F) op_decrement(data);
+    if (data >= 0x00000010 && data <= 0x0000001F) op_clear(data);
+    if (data >= 0x00000020 && data <= 0x0000002F) op_increment(data);
+    if (data >= 0x00000030 && data <= 0x0000003F) op_decrement(data);
+
+    if (data >= 0x00000070 && data <= 0x0000007F) op_jump_ne(data);
+    if (data >= 0x00000100 && data <= 0x000001FF) op_compare(data);
+    if (data >= 0x00100000 && data <= 0x001FFFFF) op_move_lower(data);
+    if (data >= 0x00200060 && data <= 0x002FFFFF) op_move_upper(data);
 
     return false;
 }
