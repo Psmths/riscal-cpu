@@ -12,6 +12,9 @@ class RISCAL_CPU {
         /* Memory address space */
         cpu_word address_space[ADDRESS_SPACE_SIZE];
 
+        /* Return stack space */
+        char *return_stack;
+
         /* Four general purpose registers R0 - R3 */
         cpu_word reg[N_REGISTERS];
 
@@ -23,9 +26,6 @@ class RISCAL_CPU {
 
         /* Stack pointer */
         cpu_word sp;
-
-        /* Base pointer */
-        cpu_word bp;
 
         bool execute_instruction(cpu_word d);
 
@@ -39,7 +39,7 @@ class RISCAL_CPU {
         void op_increment(cpu_word data);
         void op_decrement(cpu_word data);
         void op_not(cpu_word data);
-        void op_push(cpu_word data);
+        void op_push_word(cpu_word data);
         void op_pop(cpu_word data);
         void op_jump_ne(cpu_word data);
         void op_jump_e(cpu_word data);  //TODO
@@ -63,9 +63,14 @@ class RISCAL_CPU {
         void op_move_lower(cpu_word data);
 
     public:
+        /* Bare constructor */
         RISCAL_CPU();
+
+        /* Constructor for in-memory return operations */
+        RISCAL_CPU(int return_stack_size);
+
         ~RISCAL_CPU();
-        void run();
+        char *run();
         void load_rom(cpu_word *rom, int rom_size);
 };
 

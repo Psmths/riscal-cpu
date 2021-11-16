@@ -6,6 +6,8 @@
         https://hlorenzi.github.io/customasm/web/
 
     Be cautious of the endianness of the compiled code!
+
+    This program will print out the return stack as well.
 */
 
 #include "../src/cpu.cpp"
@@ -14,28 +16,23 @@
 
 int main() {
 
-    std::ifstream fileBinToRead;
-    int mcsize;
+    std::ifstream binfile;
+    int binsize;
 
-    fileBinToRead.open("output.bin", std::ios::binary);
+    binfile.open("output.bin", std::ios::binary);
 
-    if(fileBinToRead.is_open()) {
-        fileBinToRead.seekg(0, fileBinToRead.end);
-        mcsize = fileBinToRead.tellg()/sizeof(cpu_word);
-        fileBinToRead.seekg(0, fileBinToRead.beg);
-    }
+    binfile.seekg(0, binfile.end);
+    binsize = binfile.tellg()/sizeof(cpu_word);
+    binfile.seekg(0, binfile.beg);
 
-    #ifdef DEBUG
-        std::cout << "Loaded PROM Size (words): " << mcsize << std::endl;
-    #endif
+    cpu_word rom[binsize];
+    binfile.read((char*)rom, sizeof(rom));
 
-    cpu_word rom[mcsize];
-    fileBinToRead.read((char*)rom, sizeof(rom));
+    RISCAL_CPU *my_cpu = new RISCAL_CPU(1024);
+    my_cpu->load_rom(rom, binsize*sizeof(cpu_word));
+    char* result = my_cpu->run();
 
-    RISCAL_CPU *my_cpu = new RISCAL_CPU();
-    my_cpu->load_rom(rom, mcsize*sizeof(cpu_word));
-    my_cpu->run();
+    std::cout << result[i];
+
     return 0;
 }
-
-// Swap File Endinness : xxd -e -g4 test.bin | xxd -r > output.bin

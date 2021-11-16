@@ -1,6 +1,5 @@
-#ifdef DEBUG
-    #include <iostream>
-#endif
+#include <iostream>
+#include <iomanip>
 
 void RISCAL_CPU::op_nop() {
     #ifdef DEBUG
@@ -109,8 +108,10 @@ void RISCAL_CPU::op_move_lower(cpu_word data) {
 
     uint8_t op_register = (data & 0x000F0000) >> 16;
     cpu_halfword immediate = data & 0xFFFF;
-
-    reg[op_register] = immediate;
+    cpu_halfword current_upper = reg[op_register] >> 16;
+    cpu_word final = current_upper << 16;
+    final = final + immediate;
+    reg[op_register] = final;
 
     #ifdef DEBUG
         std::cout << "[DBG] MOVE_LOWER R" << std::bitset<4>(op_register) << ", " << std::bitset<16>(immediate) << std::endl;
@@ -119,13 +120,22 @@ void RISCAL_CPU::op_move_lower(cpu_word data) {
 
 void RISCAL_CPU::op_move_upper(cpu_word data) {
 
-    uint8_t op_register = data & 0x000F0000;
-    cpu_halfword immediate = (data & 0xFFFF) << 4;
-
+    uint8_t op_register = (data & 0x000F0000) >> 16;
+    cpu_halfword immediate = (data & 0xFFFF);
+    cpu_halfword current_lower = reg[op_register] & 0xFFFF;
+    cpu_word final = immediate << 16;
+    final = final + current_lower;
     //TODO: Fix this, it will clear the lower halfword
-    reg[op_register] = immediate;
+    reg[op_register] = final;
 
     #ifdef DEBUG
         std::cout << "[DBG] MOVE_UPPER R" << std::bitset<4>(op_register) << ", " << std::bitset<16>(immediate) << std::endl;
     #endif
+}
+
+void RISCAL_CPU::op_push_word(cpu_word data) {
+    uint8_t op_register = data & 0x0000000F;
+    cpu_word push_data = reg[op_register];
+    memcpy(return_stack + sp, &push_data, sizeof(cpu_word));
+    sp = sp + sizeof(cpu_word); /* Increase SP 4 for pushing word */
 }

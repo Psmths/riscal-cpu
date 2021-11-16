@@ -6,8 +6,8 @@
 	INCREMENT R{reg}			=> 0x0000002 @ reg`4
 	DECREMENT R{reg}			=> 0x0000003 @ reg`4
 	NOT R{reg}		       	 	=> 0x0000004 @ reg`4
-	PUSH R{reg}		        	=> 0x0000005 @ reg`4
-	POP R{reg}		        	=> 0x0000006 @ reg`4
+	PUSH_WORD R{reg}		    => 0x0000005 @ reg`4
+	POP_WORD R{reg}		        => 0x0000006 @ reg`4
 	JUMP_NE R{reg}		    	=> 0x0000007 @ reg`4
 	JUMP_E R{reg}		    	=> 0x0000008 @ reg`4
 	JUMPT_GT R{reg}		    	=> 0x0000009 @ reg`4
