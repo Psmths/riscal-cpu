@@ -10,7 +10,7 @@ class RISCAL_CPU {
 
     private:
         /* Memory address space */
-        cpu_word address_space[ADDRESS_SPACE_SIZE];
+        char address_space[ADDRESS_SPACE_SIZE];
 
         /* Return stack space */
         char *return_stack;
@@ -30,6 +30,9 @@ class RISCAL_CPU {
         /* Return pointer */
         cpu_word rp;
 
+        /* Error bit */
+        bool error;
+
         bool execute_instruction(cpu_word d);
 
         bool setflags(cpu_word result);
@@ -37,6 +40,7 @@ class RISCAL_CPU {
         /* Immediate commands */
         void op_nop();
         void op_return();
+        void op_fault();
 
         /* Single-register opcodes */
         void op_clear(cpu_word data);
@@ -79,7 +83,7 @@ class RISCAL_CPU {
 
         ~RISCAL_CPU();
         char *run();
-        void load_rom(cpu_word *rom, int rom_size);
+        void load_rom(char *rom, int rom_size);
 };
 
 #endif

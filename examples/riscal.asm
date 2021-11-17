@@ -3,6 +3,7 @@
     NOP                              => 0x00000000
     HALT                             => 0x00000001
     RETURN                           => 0x00000002
+    FAULT                            => 0x00000003
     CLEAR R{reg}                     => 0x0000001 @ reg`4
     INCREMENT R{reg}                 => 0x0000002 @ reg`4
     DECREMENT R{reg}                 => 0x0000003 @ reg`4

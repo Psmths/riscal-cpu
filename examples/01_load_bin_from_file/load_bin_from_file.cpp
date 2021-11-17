@@ -23,16 +23,25 @@ int main() {
     binfile.open("rom.bin", std::ios::binary);
 
     binfile.seekg(0, binfile.end);
-    binsize = binfile.tellg()/sizeof(cpu_word);
+    binsize = binfile.tellg();
     binfile.seekg(0, binfile.beg);
-    cpu_word rom[binsize];
-    binfile.read((char*)rom, sizeof(rom));
+
+    if (binsize < 0) return 1;
+
+    char rom[binsize];
+    binfile.read(rom, binsize);
 
     RISCAL_CPU *my_cpu = new RISCAL_CPU(1024);
-    my_cpu->load_rom(rom, binsize*sizeof(cpu_word));
+    my_cpu->load_rom(rom, binsize);
     char* result = my_cpu->run();
 
-    std::cout << result;
+    if (result) {
+        std::cout << result;
+    } else {
+        std::cout << "Error on escape." << std::endl;
+        return 1;
+    }
+
 
     return 0;
 }

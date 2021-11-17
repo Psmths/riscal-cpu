@@ -17,6 +17,13 @@ void RISCAL_CPU::op_return() {
     #endif
 }
 
+void RISCAL_CPU::op_fault() {
+    error = true;
+    #ifdef DEBUG
+        std::cout << "[DBG] FAULT" << std::endl;
+    #endif
+}
+
 /* Single-register commands */
 
 void RISCAL_CPU::op_clear(cpu_word data) {
@@ -307,9 +314,14 @@ void RISCAL_CPU::op_load_word(cpu_word data) {
     uint8_t op_register_y = data & 0x0000000F;
     uint8_t op_register_x = (data & 0x000000F0) >> 4;
 
-    cpu_word memory_location = reg[op_register_y]/sizeof(cpu_word);
+    cpu_word memory_location_offset = reg[op_register_y];
+    cpu_word memory_value;
 
-    reg[op_register_x] = address_space[memory_location];
+    memcpy(&memory_value, &address_space[0] + memory_location_offset, 4);
+
+    std::cout << memory_value << std::endl;
+
+    reg[op_register_x] = memory_value;
 
     #ifdef DEBUG
         std::cout << "[DBG] LOAD_WORD R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
@@ -323,7 +335,7 @@ void RISCAL_CPU::op_store_word(cpu_word data) {
 
     cpu_word memory_location = reg[op_register_y];
 
-    address_space[memory_location] = reg[op_register_x];
+    memcpy(address_space + memory_location, &reg[op_register_y], sizeof(cpu_word));
 
     #ifdef DEBUG
         std::cout << "[DBG] STORE_WORD R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;

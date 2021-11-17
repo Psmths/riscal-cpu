@@ -17,6 +17,7 @@
 */
 
 #include "../../include/cpu.hpp"
+#include <iostream>
 
 int main() {
     RISCAL_CPU *my_cpu = new RISCAL_CPU();
@@ -30,7 +31,9 @@ int main() {
                         0x00000092,
                         0x00000001};
 
-    my_cpu->load_rom(rom, sizeof(rom));
+    char rom_char [sizeof(rom)*sizeof(cpu_word)];
+    memcpy(&rom_char, &rom, sizeof(rom)*sizeof(cpu_word));
+    my_cpu->load_rom(rom_char, sizeof(rom));
     char* result = my_cpu->run();
 
     return 0;

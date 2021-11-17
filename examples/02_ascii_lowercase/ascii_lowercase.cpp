@@ -33,7 +33,9 @@ int main() {
                         0x41414141,
                         0x20202020};
 
-    my_cpu->load_rom(rom, sizeof(rom));
+    char rom_char [sizeof(rom)*sizeof(cpu_word)];
+    memcpy(&rom_char, &rom, sizeof(rom)*sizeof(cpu_word));
+    my_cpu->load_rom(rom_char, sizeof(rom));
     char* result = my_cpu->run();
 
     std::cout << "Return value: " << result << std::endl;
