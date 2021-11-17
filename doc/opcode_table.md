@@ -12,6 +12,7 @@ JUMP_NE | `0000 0000 0000 0000 0000 0000 0111 rrrr` | `0x00000070 - 0x0000007F` 
 JUMP_E | `0000 0000 0000 0000 0000 0000 1000 rrrr` | `0x00000080 - 0x0000008F` | Jump to location in register r if comparison was not equal |
 JUMP_GT | `0000 0000 0000 0000 0000 0000 1001 rrrr` | `0x00000090 - 0x0000009F` | Jump to location in register r if comparison was not equal |
 JUMP_LT | `0000 0000 0000 0000 0000 0000 1010 rrrr` | `0x000000A0 - 0x000000AF` | Jump to location in register r if comparison was not equal |
-COMPARE | `0000 0000 0000 0000 0000 0001 yyyy xxxx` | `0x00000100 - 0x000001FF` | Compare register x to register y |
+COMPARE | `0000 0000 0000 0000 0000 0001 xxxx yyyy` | `0x00000100 - 0x000001FF` | Compare register x to register y |
+ADD | `0000 0000 0000 0000 0000 0001 xxxx yyyy` | `0x00000100 - 0x000001FF` | Add register x to register y and store result in x |
 MOVE_LOWER | `0000 0000 0001 rrrr nnnn nnnn nnnn nnnn` | `0x00100000 - 0x001FFFFF` | Move immediate value n (half-word) to register r lower half |
 MOVE_UPPER | `0000 0000 0010 rrrr nnnn nnnn nnnn nnnn` | `0x00200060 - 0x002FFFFF` | Move immediate value n (half-word) to register r upper half |

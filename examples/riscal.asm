@@ -12,9 +12,8 @@
 	JUMP_E R{reg}		    	=> 0x0000008 @ reg`4
 	JUMPT_GT R{reg}		    	=> 0x0000009 @ reg`4
 	JUMP_LT R{reg}		    	=> 0x000000A @ reg`4
-
 	COMPARE R{reg1}, R{reg2}	=> 0x000001 @ reg1`4 @ reg2`4
-
+    ADD R{reg1}, R{reg2}	    => 0x000002 @ reg1`4 @ reg2`4
 	MOVE_LOWER R{reg}, {val}	=> 0x001 @ reg`4 @ val`16
 	MOVE_UPPER R{reg}, {val}	=> 0x002 @ reg`4 @ val`16
 }

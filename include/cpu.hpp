@@ -48,7 +48,7 @@ class RISCAL_CPU {
 
         /* Double-register opcodes */
         void op_compare(cpu_word data);
-        //void op_add(cpu_word data);
+        void op_add(cpu_word data);
         //void op_subtract(cpu_word data);
         //void op_leftshift(cpu_word data);
         //void op_rightshift(cpu_word data);

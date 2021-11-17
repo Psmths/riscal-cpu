@@ -19,6 +19,7 @@ RISCAL_CPU::RISCAL_CPU() {
 }
 
 RISCAL_CPU::RISCAL_CPU(int return_stack_size) {
+    std::cout << "test";
     /* Clear registers */
     pc, sp, flags = 0;
     for (int i = 0; i < N_REGISTERS; i++) reg[i] = 0;
@@ -99,6 +100,7 @@ bool RISCAL_CPU::execute_instruction(cpu_word data) {
     //if (data >= 0x000000A0 && data <= 0x000000AF) op_jump_lt(data);
 
     if (data >= 0x00000100 && data <= 0x000001FF) op_compare(data);
+    if (data >= 0x00000200 && data <= 0x000002FF) op_add(data);
 
     if (data >= 0x00100000 && data <= 0x001FFFFF) op_move_lower(data);
     if (data >= 0x00200060 && data <= 0x002FFFFF) op_move_upper(data);

@@ -24,7 +24,7 @@ int main() {
     binfile.seekg(0, binfile.end);
     binsize = binfile.tellg()/sizeof(cpu_word);
     binfile.seekg(0, binfile.beg);
-
+    std::cout << binsize;
     cpu_word rom[binsize];
     binfile.read((char*)rom, sizeof(rom));
 
@@ -32,7 +32,7 @@ int main() {
     my_cpu->load_rom(rom, binsize*sizeof(cpu_word));
     char* result = my_cpu->run();
 
-    std::cout << result[i];
+    std::cout << result;
 
     return 0;
 }

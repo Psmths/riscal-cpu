@@ -47,6 +47,16 @@ void RISCAL_CPU::op_not(cpu_word data) {
     #endif
 }
 
+void RISCAL_CPU::op_push_word(cpu_word data) {
+    uint8_t op_register = data & 0x0000000F;
+    cpu_word push_data = reg[op_register];
+    memcpy(return_stack + sp, &push_data, sizeof(cpu_word));
+    sp = sp + sizeof(cpu_word); /* Increase SP 4 for pushing word */
+    #ifdef DEBUG
+        std::cout << "[DBG] PUSH R" << std::bitset<4>(op_register) << std::endl;
+    #endif
+}
+
 void RISCAL_CPU::op_jump_ne(cpu_word data) {
 
     uint8_t op_register = data & 0x0000000F;
@@ -80,8 +90,8 @@ void RISCAL_CPU::op_compare(cpu_word data) {
     /* Reset FLAGS register */
     flags = 0;
 
-    uint8_t op_register_x = data & 0x0000000F;
-    uint8_t op_register_y = (data & 0x000000F0) >> 4;
+    uint8_t op_register_y = data & 0x0000000F;
+    uint8_t op_register_x = (data & 0x000000F0) >> 4;
 
     cpu_word x = reg[op_register_x];
     cpu_word y = reg[op_register_y];
@@ -101,6 +111,26 @@ void RISCAL_CPU::op_compare(cpu_word data) {
 
     #ifdef DEBUG
         std::cout << "[DBG] COMPARE R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_add(cpu_word data) {
+
+    /* Reset FLAGS register */
+    flags = 0;
+
+    uint8_t op_register_y = data & 0x0000000F;
+    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+
+    cpu_word x = reg[op_register_x];
+    cpu_word y = reg[op_register_y];
+
+    cpu_word result = x + y;
+
+    reg[op_register_x] = result;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] ADD R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
     #endif
 }
 
@@ -131,11 +161,4 @@ void RISCAL_CPU::op_move_upper(cpu_word data) {
     #ifdef DEBUG
         std::cout << "[DBG] MOVE_UPPER R" << std::bitset<4>(op_register) << ", " << std::bitset<16>(immediate) << std::endl;
     #endif
-}
-
-void RISCAL_CPU::op_push_word(cpu_word data) {
-    uint8_t op_register = data & 0x0000000F;
-    cpu_word push_data = reg[op_register];
-    memcpy(return_stack + sp, &push_data, sizeof(cpu_word));
-    sp = sp + sizeof(cpu_word); /* Increase SP 4 for pushing word */
 }
