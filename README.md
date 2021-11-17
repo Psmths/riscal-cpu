@@ -3,8 +3,9 @@ RISCAL is a 32-bit custom instruction set architecture virtual machine. It is in
 
 * 32-bit, fixed-length instruction set
 * 16 General-purpose registers
-* FLAGS, stack pointer, base pointer
+* FLAGS, stack pointer
 * 65536 words of program memory (262144 bytes)
+* Ability to set up and leverage a return stack to retrieve data after RISCAL exits
 
 ## Assembling for RISCAL
 The easiest way to get starting programming RISCAL is to grab a copy of [customasm](https://github.com/hlorenzi/customasm). This repo contains the custom instruction set definition in the examples directory, in the file riscal.asm to get you started, as well as a small loop test program.
