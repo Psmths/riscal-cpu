@@ -1,3 +1,5 @@
+#include "../include/cpu.hpp"
+
 #include <iostream>
 #include <iomanip>
 

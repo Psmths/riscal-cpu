@@ -1,7 +1,7 @@
 # Prerequisites
 *.d
 *.sh
-
+bin/*
 # Compiled Object files
 *.slo
 *.lo

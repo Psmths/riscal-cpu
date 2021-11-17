@@ -1,5 +1,5 @@
 #include "../include/cpu.hpp"
-#include "operation_exec.cpp"
+
 #include <iostream>
 
 #ifdef DEBUG

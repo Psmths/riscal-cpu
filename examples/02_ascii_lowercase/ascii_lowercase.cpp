@@ -17,7 +17,8 @@
     20:0 |   20 | 20 20 20 20 ; #d32 0x20202020
 */
 
-#include "../../src/cpu.cpp"
+#include "../../include/cpu.hpp"
+#include <iostream>
 
 int main() {
     RISCAL_CPU *my_cpu = new RISCAL_CPU();

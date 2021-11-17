@@ -16,7 +16,7 @@
      1c:0 |   1c | 00 00 00 01 ; HALT
 */
 
-#include "../../src/cpu.cpp"
+#include "../../include/cpu.hpp"
 
 int main() {
     RISCAL_CPU *my_cpu = new RISCAL_CPU();
@@ -32,8 +32,6 @@ int main() {
 
     my_cpu->load_rom(rom, sizeof(rom));
     char* result = my_cpu->run();
-
-    std::cout << "Return value: " << result << std::endl;
 
     return 0;
 }

@@ -11,7 +11,8 @@
     This program will print out the return stack as well.
 */
 
-#include "../../src/cpu.cpp"
+#include "../../include/cpu.hpp"
+#include <iostream>
 #include <fstream>
 
 int main() {
