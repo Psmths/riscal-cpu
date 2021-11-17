@@ -27,12 +27,16 @@ class RISCAL_CPU {
         /* Stack pointer */
         cpu_word sp;
 
+        /* Return pointer */
+        cpu_word rp;
+
         bool execute_instruction(cpu_word d);
 
         bool setflags(cpu_word result);
 
         /* Immediate commands */
         void op_nop();
+        void op_return();
 
         /* Single-register opcodes */
         void op_clear(cpu_word data);
@@ -40,25 +44,29 @@ class RISCAL_CPU {
         void op_decrement(cpu_word data);
         void op_not(cpu_word data);
         void op_push_word(cpu_word data);
-        void op_pop(cpu_word data);
+        //void op_pop_word(cpu_word data);
+        //void op_push_byte(cpu_word data);
+        //void op_pop_byte(cpu_word data);
         void op_jump_ne(cpu_word data);
-        void op_jump_e(cpu_word data);  //TODO
-        //void op_jump_gt(cpu_word data); //TODO
-        //void op_jump_lt(cpu_word data); //TODO
+        void op_jump_e(cpu_word data);
+        //void op_jump_gt(cpu_word data);
+        //void op_jump_lt(cpu_word data);
+        void op_call(cpu_word data);
 
         /* Double-register opcodes */
         void op_compare(cpu_word data);
         void op_add(cpu_word data);
-        //void op_subtract(cpu_word data);
-        //void op_leftshift(cpu_word data);
-        //void op_rightshift(cpu_word data);
-        //void op_and(cpu_word data);
-        //void op_or(cpu_word data);
-        //void op_xor(cpu_word data);
-        //void op_exchange(cpu_word data);
-        //void op_move(cpu_word data);
+        void op_subtract(cpu_word data);
+        void op_or(cpu_word data);
+        void op_and(cpu_word data);
+        void op_xor(cpu_word data);
+        void op_shift_left(cpu_word data);
+        void op_shift_right(cpu_word data);
+        void op_exchange(cpu_word data);
+        void op_load_word(cpu_word data);
+        void op_store_word(cpu_word data);
 
-        /* Data commands */
+        /* Data immediate commands */
         void op_move_upper(cpu_word data);
         void op_move_lower(cpu_word data);
 

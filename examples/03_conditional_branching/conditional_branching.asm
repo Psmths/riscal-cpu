@@ -1,4 +1,4 @@
-test:
+main:
 	CLEAR R0
 	CLEAR R1
 	MOVE_LOWER R1, 3

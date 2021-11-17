@@ -7,6 +7,16 @@ void RISCAL_CPU::op_nop() {
     #endif
 }
 
+void RISCAL_CPU::op_return() {
+    pc = rp; /* Return to location in return pointer */
+    rp = 0x00000000; /* Reset return pointer */
+    #ifdef DEBUG
+        std::cout << "[DBG] RETURN" << std::endl;
+    #endif
+}
+
+/* Single-register commands */
+
 void RISCAL_CPU::op_clear(cpu_word data) {
 
     uint8_t op_register = data & 0x0000000F;
@@ -43,7 +53,7 @@ void RISCAL_CPU::op_not(cpu_word data) {
     reg[op_register] = !reg[op_register];
 
     #ifdef DEBUG
-        std::cout << "[DBG] DECREMENT R" << std::bitset<4>(op_register) << std::endl;
+        std::cout << "[DBG] NOT R" << std::bitset<4>(op_register) << std::endl;
     #endif
 }
 
@@ -84,6 +94,24 @@ void RISCAL_CPU::op_jump_e(cpu_word data) {
         std::cout << "[DBG] JUMP_E R" << std::bitset<4>(op_register) << std::endl;
     #endif
 }
+
+void RISCAL_CPU::op_call(cpu_word data) {
+
+    uint8_t op_register = data & 0x0000000F;
+    cpu_word jump_location = reg[op_register];
+
+    /* Set return pointer register to current program counter */
+    rp = pc;
+
+    /* Jump to call pointer */
+    pc = jump_location;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] CALL R" << std::bitset<4>(op_register) << std::endl;
+    #endif
+}
+
+/* Double-register commands */
 
 void RISCAL_CPU::op_compare(cpu_word data) {
 
@@ -133,6 +161,174 @@ void RISCAL_CPU::op_add(cpu_word data) {
         std::cout << "[DBG] ADD R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
     #endif
 }
+
+void RISCAL_CPU::op_subtract(cpu_word data) {
+
+    /* Reset FLAGS register */
+    flags = 0;
+
+    uint8_t op_register_y = data & 0x0000000F;
+    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+
+    cpu_word x = reg[op_register_x];
+    cpu_word y = reg[op_register_y];
+
+    cpu_word result = x - y;
+
+    reg[op_register_x] = result;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] SUB R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_or(cpu_word data) {
+
+    /* Reset FLAGS register */
+    flags = 0;
+
+    uint8_t op_register_y = data & 0x0000000F;
+    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+
+    cpu_word x = reg[op_register_x];
+    cpu_word y = reg[op_register_y];
+
+    cpu_word result = x | y;
+
+    reg[op_register_x] = result;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] OR R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_and(cpu_word data) {
+
+    /* Reset FLAGS register */
+    flags = 0;
+
+    uint8_t op_register_y = data & 0x0000000F;
+    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+
+    cpu_word x = reg[op_register_x];
+    cpu_word y = reg[op_register_y];
+
+    cpu_word result = x & y;
+
+    reg[op_register_x] = result;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] AND R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_xor(cpu_word data) {
+
+    /* Reset FLAGS register */
+    flags = 0;
+
+    uint8_t op_register_y = data & 0x0000000F;
+    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+
+    cpu_word x = reg[op_register_x];
+    cpu_word y = reg[op_register_y];
+
+    cpu_word result = x ^ y;
+
+    reg[op_register_x] = result;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] XOR R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_shift_left(cpu_word data) {
+
+    /* Reset FLAGS register */
+    flags = 0;
+
+    uint8_t op_register_y = data & 0x0000000F;
+    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+
+    cpu_word x = reg[op_register_x];
+    cpu_word y = reg[op_register_y];
+
+    cpu_word result = x << y;
+
+    reg[op_register_x] = result;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] SHIFT_LEFT R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_shift_right(cpu_word data) {
+
+    /* Reset FLAGS register */
+    flags = 0;
+
+    uint8_t op_register_y = data & 0x0000000F;
+    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+
+    cpu_word x = reg[op_register_x];
+    cpu_word y = reg[op_register_y];
+
+    cpu_word result = x >> y;
+
+    reg[op_register_x] = result;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] SHIFT_RIGHT R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_exchange(cpu_word data) {
+
+    uint8_t op_register_y = data & 0x0000000F;
+    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+
+    cpu_word x = reg[op_register_x];
+    cpu_word y = reg[op_register_y];
+
+    cpu_word temp = x;
+
+    reg[op_register_x] = y;
+    reg[op_register_y] = x;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] EXCHANGE R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_load_word(cpu_word data) {
+
+    uint8_t op_register_y = data & 0x0000000F;
+    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+
+    cpu_word memory_location = reg[op_register_y]/sizeof(cpu_word);
+
+    reg[op_register_x] = address_space[memory_location];
+
+    #ifdef DEBUG
+        std::cout << "[DBG] LOAD_WORD R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_store_word(cpu_word data) {
+
+    uint8_t op_register_y = data & 0x0000000F;
+    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+
+    cpu_word memory_location = reg[op_register_y];
+
+    address_space[memory_location] = reg[op_register_x];
+
+    #ifdef DEBUG
+        std::cout << "[DBG] STORE_WORD R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+    #endif
+}
+
+/* Data immediate commands */
 
 void RISCAL_CPU::op_move_lower(cpu_word data) {
 

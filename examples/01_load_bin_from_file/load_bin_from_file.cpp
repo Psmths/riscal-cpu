@@ -1,5 +1,6 @@
 /*
     load_bin_from_file.cpp
+
     This is a program to load a compiled binary for RISCAL into the RISCAL VM
     and execute it. You can try compiling using customasm:
 
@@ -10,21 +11,19 @@
     This program will print out the return stack as well.
 */
 
-#include "../src/cpu.cpp"
+#include "../../src/cpu.cpp"
 #include <fstream>
-#include <vector>
 
 int main() {
 
     std::ifstream binfile;
     int binsize;
 
-    binfile.open("output.bin", std::ios::binary);
+    binfile.open("rom.bin", std::ios::binary);
 
     binfile.seekg(0, binfile.end);
     binsize = binfile.tellg()/sizeof(cpu_word);
     binfile.seekg(0, binfile.beg);
-    std::cout << binsize;
     cpu_word rom[binsize];
     binfile.read((char*)rom, sizeof(rom));
 
