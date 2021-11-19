@@ -87,6 +87,8 @@ class RISCAL_CPU {
         void op_load_byte_imm(cpu_word data);
         //void op_store_byte_imm(cpu_word data);
         void op_jump_ne_imm(cpu_word data);
+        void op_jump_e_imm(cpu_word data);
+        void op_jump_imm(cpu_word data);
 
         typedef void (RISCAL_CPU::*op_f)(cpu_word data);
 
@@ -121,7 +123,9 @@ class RISCAL_CPU {
             {MOVE_UPPER, &RISCAL_CPU::op_move_upper},
             {LOAD_WORD_IMM, &RISCAL_CPU::op_load_word_imm},
             {LOAD_BYTE_IMM, &RISCAL_CPU::op_load_byte_imm},
-            {JUMP_NE_IMM, &RISCAL_CPU::op_jump_ne_imm}
+            {JUMP_NE_IMM, &RISCAL_CPU::op_jump_ne_imm},
+            {JUMP_E_IMM, &RISCAL_CPU::op_jump_e_imm},
+            {JUMP_IMM, &RISCAL_CPU::op_jump_imm}
         };
 
     public:

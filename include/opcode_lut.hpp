@@ -41,5 +41,6 @@
 #define JUMP_E_IMM 0x800
 #define JUMP_GT_IMM  0x900
 #define JUMP_LT_IMM  0xA00
+#define JUMP_IMM  0xB00
 
 #endif

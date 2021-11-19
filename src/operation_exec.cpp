@@ -33,7 +33,7 @@ void RISCAL_CPU::op_fault(cpu_word data) {
 void RISCAL_CPU::op_clear(cpu_word data) {
 
     uint8_t op_register = data & 0x0000000F;
-    reg[op_register] = 0;
+    reg[op_register] = 0x00000000;
 
     #ifdef DEBUG
         std::cout << "[DBG] CLEAR R" << std::bitset<4>(op_register) << std::endl;
@@ -175,6 +175,10 @@ void RISCAL_CPU::op_compare(cpu_word data) {
 
     if (x < y) {
         flags = flags | 0x2; // C
+    }
+
+    if (x > y) {
+        flags = flags | 0x0; // C
     }
 
     #ifdef DEBUG
@@ -333,60 +337,60 @@ void RISCAL_CPU::op_exchange(cpu_word data) {
 }
 
 void RISCAL_CPU::op_load_word(cpu_word data) {
-    uint8_t op_register_y = data & 0x0000000F;
-    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+    uint8_t op_register_offset = data & 0x0000000F;
+    uint8_t op_register_data = (data & 0x000000F0) >> 4;
 
-    cpu_word memory_location_offset = reg[op_register_y];
-    cpu_word memory_value;
+    cpu_word memory_location_offset = reg[op_register_offset];
+    cpu_word memory_value = 0;
 
-    memcpy(&memory_value, &address_space[0] + memory_location_offset, 4);
+    memcpy(&memory_value, &address_space[0] + memory_location_offset, sizeof(cpu_word));
 
-    reg[op_register_x] = memory_value;
+    reg[op_register_data] = memory_value;
 
     #ifdef DEBUG
-        std::cout << "[DBG] LOAD_WORD R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+        std::cout << "[DBG] LOAD_WORD R" << std::bitset<4>(op_register_data) << ", R" << std::bitset<4>(op_register_offset) << std::endl;
     #endif
 }
 
 void RISCAL_CPU::op_store_word(cpu_word data) {
-    uint8_t op_register_y = data & 0x0000000F;
-    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+    uint8_t op_register_offset = data & 0x0000000F;
+    uint8_t op_register_data = (data & 0x000000F0) >> 4;
 
-    cpu_word memory_location_offset = reg[op_register_y];
+    cpu_word memory_location_offset = reg[op_register_offset];
 
-    memcpy(&address_space[0] + memory_location_offset, &reg[op_register_y], sizeof(cpu_word));
+    memcpy(&address_space[0] + memory_location_offset, &reg[op_register_data], sizeof(cpu_word));
 
     #ifdef DEBUG
-        std::cout << "[DBG] STORE_WORD R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+        std::cout << "[DBG] STORE_WORD R" << std::bitset<4>(op_register_data) << ", R" << std::bitset<4>(op_register_offset) << std::endl;
     #endif
 }
 
 void RISCAL_CPU::op_load_byte(cpu_word data) {
-    uint8_t op_register_y = data & 0x0000000F;
-    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+    uint8_t op_register_offset = data & 0x0000000F;
+    uint8_t op_register_data = (data & 0x000000F0) >> 4;
 
-    cpu_word memory_location_offset = reg[op_register_y];
-    cpu_word memory_value;
+    cpu_word memory_location_offset = reg[op_register_offset];
+    cpu_word memory_value = 0;
 
-    memcpy(&memory_value, &address_space[0] + memory_location_offset, 1);
+    memcpy(&memory_value, &address_space[0] + memory_location_offset, sizeof(cpu_byte));
 
-    reg[op_register_x] = memory_value & 0x000000FF;
+    reg[op_register_data] = memory_value & 0x000000FF;
 
     #ifdef DEBUG
-        std::cout << "[DBG] LOAD_BYTE R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+        std::cout << "[DBG] LOAD_BYTE R" << std::bitset<4>(op_register_data) << ", R" << std::bitset<4>(op_register_offset) << std::endl;
     #endif
 }
 
 void RISCAL_CPU::op_store_byte(cpu_word data) {
-    uint8_t op_register_y = data & 0x0000000F;
-    uint8_t op_register_x = (data & 0x000000F0) >> 4;
+    uint8_t op_register_offset = data & 0x0000000F;
+    uint8_t op_register_data = (data & 0x000000F0) >> 4;
 
-    cpu_word memory_location_offset = reg[op_register_y] & 0x000000FF;
+    cpu_word memory_location_offset = reg[op_register_offset];
 
-    memcpy(&address_space[0] + memory_location_offset, &reg[op_register_y], sizeof(cpu_byte));
+    memcpy(&address_space[0] + memory_location_offset, &reg[op_register_data], sizeof(cpu_byte));
 
     #ifdef DEBUG
-        std::cout << "[DBG] STORE_BYTE R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
+        std::cout << "[DBG] STORE_BYTE R" << std::bitset<4>(op_register_data) << ", R" << std::bitset<4>(op_register_offset) << std::endl;
     #endif
 }
 
@@ -401,7 +405,7 @@ void RISCAL_CPU::op_move_lower(cpu_word data) {
     reg[op_register] = final;
 
     #ifdef DEBUG
-        std::cout << "[DBG] MOVE_LOWER R" << std::bitset<4>(op_register) << ", " << std::bitset<16>(immediate) << std::endl;
+        std::cout << "[DBG] MOVE_LOWER(imm) R" << std::bitset<4>(op_register) << ", " << std::bitset<16>(immediate) << std::endl;
     #endif
 }
 
@@ -415,7 +419,7 @@ void RISCAL_CPU::op_move_upper(cpu_word data) {
     reg[op_register] = final;
 
     #ifdef DEBUG
-        std::cout << "[DBG] MOVE_UPPER R" << std::bitset<4>(op_register) << ", " << std::bitset<16>(immediate) << std::endl;
+        std::cout << "[DBG] MOVE_UPPER(imm) R" << std::bitset<4>(op_register) << ", " << std::bitset<16>(immediate) << std::endl;
     #endif
 }
 
@@ -427,7 +431,7 @@ void RISCAL_CPU::op_load_word_imm(cpu_word data) {
     reg[op_register] = memory_value;
 
     #ifdef DEBUG
-        std::cout << "[DBG] LOAD WORD R" << std::bitset<4>(op_register) << ", @" << std::bitset<16>(memory_location_offset) << std::endl;
+        std::cout << "[DBG] LOAD_WORD(imm) R" << std::bitset<4>(op_register) << ", @" << std::bitset<16>(memory_location_offset) << std::endl;
     #endif
 }
 
@@ -439,7 +443,7 @@ void RISCAL_CPU::op_load_byte_imm(cpu_word data) {
     reg[op_register] = memory_value & 0x000000FF;
 
     #ifdef DEBUG
-        std::cout << "[DBG] LOAD BYTE R" << std::bitset<4>(op_register) << ", @" << std::bitset<16>(memory_location_offset) << std::endl;
+        std::cout << "[DBG] LOAD_BYTE(imm) R" << std::bitset<4>(op_register) << ", @" << std::bitset<16>(memory_location_offset) << std::endl;
     #endif
 }
 
@@ -451,6 +455,27 @@ void RISCAL_CPU::op_jump_ne_imm(cpu_word data) {
     if (!zero & !carry) pc = jump_location - 4;
 
     #ifdef DEBUG
-        std::cout << "[DBG] JUMP_NE(i) @" << std::bitset<16>(jump_location) << std::endl;
+        std::cout << "[DBG] JUMP_NE(imm) @" << std::bitset<16>(jump_location) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_jump_e_imm(cpu_word data) {
+    cpu_halfword jump_location = data & 0xFFFF;
+    /* Get result of comparison */
+    bool zero = flags & FLAGS_MASK_ZERO;
+    bool carry = flags & FLAGS_MASK_CARRY;
+    if (zero) pc = jump_location - 4;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] JUMP_E(imm) @" << std::bitset<16>(jump_location) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_jump_imm(cpu_word data) {
+    cpu_halfword jump_location = data & 0xFFFF;
+    pc = jump_location - 4;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] JUMP(imm) @" << std::bitset<16>(jump_location) << std::endl;
     #endif
 }

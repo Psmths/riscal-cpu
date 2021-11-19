@@ -1,9 +1,8 @@
 /*
     my_adder.cpp - Example program that passes two 16-bit unsigned integers
     to the RISCAL stack, adds them, and returns them to the stack.
-
+    
     outp | addr | data
-
      0:0 |    0 | 00 90 00 01 ; POP_WORD R1
      4:0 |    4 | 00 90 00 02 ; POP_WORD R2
      8:0 |    8 | 03 00 00 12 ; ADD R1, R2

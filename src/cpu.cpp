@@ -121,6 +121,5 @@ bool RISCAL_CPU::execute_instruction() {
         op_f fp = op_function_map[opcode];
         (this->*fp)(data);
     }
-
     return false;
 }

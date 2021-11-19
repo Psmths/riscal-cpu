@@ -7,7 +7,7 @@ bin/*
 *.lo
 *.o
 *.obj
-
+*.ignore
 # Precompiled Headers
 *.gch
 *.pch

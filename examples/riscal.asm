@@ -40,4 +40,5 @@
 	JUMP_E {val}                     => 0x8000 @ val`16
 	JUMP_GT {val}                    => 0x9000 @ val`16
 	JUMP_LT {val}                    => 0xA000 @ val`16
+	JUMP {val}                       => 0xB000 @ val`16
 }
