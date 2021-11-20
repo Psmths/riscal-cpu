@@ -16,4 +16,6 @@ jobs:
     - name: make
       run: make
     - name: make examples
-      run: make examples
+      run: make examples 
+    - name: make test
+      run: make test
