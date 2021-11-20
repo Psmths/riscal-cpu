@@ -2,6 +2,7 @@
 
 ![](https://img.shields.io/github/license/Psmths/riscal-cpu.svg)
 ![](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
+![](https://github.com/Psmths/riscal-cpu/workflows/CodeQL/badge.svg)
 
 RISCAL is a 32-bit custom instruction set architecture virtual machine. It is intended to be used for learning/research purposes. In a nutshell, so far:
 
