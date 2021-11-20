@@ -60,8 +60,9 @@ class RISCAL_CPU {
         void op_pop_byte(cpu_word data);
         void op_jump_ne(cpu_word data);
         void op_jump_e(cpu_word data);
-        //void op_jump_gt(cpu_word data);
-        //void op_jump_lt(cpu_word data);
+        void op_jump_gt(cpu_word data);
+        void op_jump_lt(cpu_word data);
+        void op_jump(cpu_word data);
         void op_call(cpu_word data);
 
         /* Double-register opcodes */
@@ -83,11 +84,13 @@ class RISCAL_CPU {
         void op_move_upper(cpu_word data);
         void op_move_lower(cpu_word data);
         void op_load_word_imm(cpu_word data);
-        //void op_store_word_imm(cpu_word data);
+        void op_store_word_imm(cpu_word data);
         void op_load_byte_imm(cpu_word data);
-        //void op_store_byte_imm(cpu_word data);
+        void op_store_byte_imm(cpu_word data);
         void op_jump_ne_imm(cpu_word data);
         void op_jump_e_imm(cpu_word data);
+        void op_jump_gt_imm(cpu_word data);
+        void op_jump_lt_imm(cpu_word data);
         void op_jump_imm(cpu_word data);
 
         typedef void (RISCAL_CPU::*op_f)(cpu_word data);
@@ -105,6 +108,9 @@ class RISCAL_CPU {
             {POP_BYTE, &RISCAL_CPU::op_pop_byte},
             {JUMP_NE, &RISCAL_CPU::op_jump_ne},
             {JUMP_E, &RISCAL_CPU::op_jump_e},
+            {JUMP_GT, &RISCAL_CPU::op_jump_gt},
+            {JUMP_LT, &RISCAL_CPU::op_jump_lt},
+            {JUMP, &RISCAL_CPU::op_jump},
             {CALL, &RISCAL_CPU::op_call},
             {COMPARE, &RISCAL_CPU::op_compare},
             {ADD, &RISCAL_CPU::op_add},
@@ -122,9 +128,13 @@ class RISCAL_CPU {
             {MOVE_LOWER, &RISCAL_CPU::op_move_lower},
             {MOVE_UPPER, &RISCAL_CPU::op_move_upper},
             {LOAD_WORD_IMM, &RISCAL_CPU::op_load_word_imm},
+            {STORE_WORD_IMM, &RISCAL_CPU::op_store_word_imm},
             {LOAD_BYTE_IMM, &RISCAL_CPU::op_load_byte_imm},
+            {STORE_BYTE_IMM, &RISCAL_CPU::op_store_byte_imm},
             {JUMP_NE_IMM, &RISCAL_CPU::op_jump_ne_imm},
             {JUMP_E_IMM, &RISCAL_CPU::op_jump_e_imm},
+            {JUMP_GT_IMM, &RISCAL_CPU::op_jump_gt_imm},
+            {JUMP_LT_IMM, &RISCAL_CPU::op_jump_lt_imm},
             {JUMP_IMM, &RISCAL_CPU::op_jump_imm}
         };
 

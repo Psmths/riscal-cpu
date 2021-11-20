@@ -14,8 +14,9 @@
     POP_BYTE R{reg}                  => 0x00B0000 @ reg`4
     JUMP_NE R{reg}                   => 0x00C0000 @ reg`4
     JUMP_E R{reg}                    => 0x00D0000 @ reg`4
-    JUMPT_GT R{reg}                  => 0x00E0000 @ reg`4
+    JUMP_GT R{reg}                  => 0x00E0000 @ reg`4
     JUMP_LT R{reg}                   => 0x00F0000 @ reg`4
+	JUMP R{reg}                      => 0x01F0000 @ reg`4
     CALL R{reg}                      => 0x0100000 @ reg`4
     COMPARE R{reg1}, R{reg2}         => 0x020000 @ reg1`4 @ reg2`4
     ADD R{reg1}, R{reg2}             => 0x030000 @ reg1`4 @ reg2`4

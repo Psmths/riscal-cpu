@@ -17,6 +17,7 @@
 #define JUMP_E 0x00D
 #define JUMP_GT 0x00E
 #define JUMP_LT 0x00F
+#define JUMP 0x01F
 #define CALL 0x010
 #define COMPARE 0x020
 #define ADD 0x030

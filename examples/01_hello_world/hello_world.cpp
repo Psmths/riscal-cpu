@@ -31,6 +31,10 @@ int main() {
 
     my_cpu->load_rom(rom, sizeof(rom));
     unsigned char* result = my_cpu->run();
-    std::cout << result << std::endl;
+    if (result) {
+        std::cout << result << std::endl;
+    } else {
+        return 1;
+    }
     return 0;
 }

@@ -116,8 +116,7 @@ void RISCAL_CPU::op_jump_ne(cpu_word data) {
 
     /* Get result of comparison */
     bool zero = flags & FLAGS_MASK_ZERO;
-    bool carry = flags & FLAGS_MASK_CARRY;
-    if (!zero & !carry) pc = jump_location - 4;
+    if (!zero) pc = jump_location - 4;
 
     #ifdef DEBUG
         std::cout << "[DBG] JUMP_NE R" << std::bitset<4>(op_register) << std::endl;
@@ -134,6 +133,41 @@ void RISCAL_CPU::op_jump_e(cpu_word data) {
     if (zero & carry) pc = jump_location - 4;
     #ifdef DEBUG
         std::cout << "[DBG] JUMP_E R" << std::bitset<4>(op_register) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_jump_gt(cpu_word data) {
+    uint8_t op_register = data & 0x0000000F;
+    cpu_word jump_location = reg[op_register];
+
+    /* Get result of comparison */
+    bool zero = flags & FLAGS_MASK_ZERO;
+    bool carry = flags & FLAGS_MASK_CARRY;
+    if (!zero & !carry) pc = jump_location - 4;
+    #ifdef DEBUG
+        std::cout << "[DBG] JUMP_GT R" << std::bitset<4>(op_register) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_jump_lt(cpu_word data) {
+    uint8_t op_register = data & 0x0000000F;
+    cpu_word jump_location = reg[op_register];
+
+    /* Get result of comparison */
+    bool zero = flags & FLAGS_MASK_ZERO;
+    bool carry = flags & FLAGS_MASK_CARRY;
+    if (!zero & carry) pc = jump_location - 4;
+    #ifdef DEBUG
+        std::cout << "[DBG] JUMP_LT R" << std::bitset<4>(op_register) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_jump(cpu_word data) {
+    uint8_t op_register = data & 0x0000000F;
+    cpu_word jump_location = reg[op_register];
+    pc = jump_location - 4;
+    #ifdef DEBUG
+        std::cout << "[DBG] JUMP R" << std::bitset<4>(op_register) << std::endl;
     #endif
 }
 
@@ -435,6 +469,17 @@ void RISCAL_CPU::op_load_word_imm(cpu_word data) {
     #endif
 }
 
+void RISCAL_CPU::op_store_word_imm(cpu_word data) {
+    uint8_t op_register_data = (data & 0x000F0000) >> 16;
+    cpu_halfword memory_location_offset = data & 0xFFFF;
+
+    memcpy(&address_space[0] + memory_location_offset, &reg[op_register_data], sizeof(cpu_word));
+
+    #ifdef DEBUG
+        std::cout << "[DBG] STORE_WORD(imm) R" << std::bitset<4>(op_register_data) << ", R" << std::bitset<16>(memory_location_offset) << std::endl;
+    #endif
+}
+
 void RISCAL_CPU::op_load_byte_imm(cpu_word data) {
     uint8_t op_register = (data & 0x000F0000) >> 16;
     cpu_halfword memory_location_offset = data & 0xFFFF;
@@ -447,12 +492,22 @@ void RISCAL_CPU::op_load_byte_imm(cpu_word data) {
     #endif
 }
 
+void RISCAL_CPU::op_store_byte_imm(cpu_word data) {
+    uint8_t op_register_data = (data & 0x000F0000) >> 16;
+    cpu_halfword memory_location_offset = data & 0xFFFF;
+
+    memcpy(&address_space[0] + memory_location_offset, &reg[op_register_data], sizeof(cpu_byte));
+
+    #ifdef DEBUG
+        std::cout << "[DBG] STORE_BYTE(imm) R" << std::bitset<4>(op_register_data) << ", R" << std::bitset<16>(memory_location_offset) << std::endl;
+    #endif
+}
+
 void RISCAL_CPU::op_jump_ne_imm(cpu_word data) {
     cpu_halfword jump_location = data & 0xFFFF;
     /* Get result of comparison */
     bool zero = flags & FLAGS_MASK_ZERO;
-    bool carry = flags & FLAGS_MASK_CARRY;
-    if (!zero & !carry) pc = jump_location - 4;
+    if (!zero) pc = jump_location - 4;
 
     #ifdef DEBUG
         std::cout << "[DBG] JUMP_NE(imm) @" << std::bitset<16>(jump_location) << std::endl;
@@ -468,6 +523,30 @@ void RISCAL_CPU::op_jump_e_imm(cpu_word data) {
 
     #ifdef DEBUG
         std::cout << "[DBG] JUMP_E(imm) @" << std::bitset<16>(jump_location) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_jump_gt_imm(cpu_word data) {
+    cpu_halfword jump_location = data & 0xFFFF;
+    /* Get result of comparison */
+    bool zero = flags & FLAGS_MASK_ZERO;
+    bool carry = flags & FLAGS_MASK_CARRY;
+    if (!zero & !carry) pc = jump_location - 4;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] JUMP_GT(imm) @" << std::bitset<16>(jump_location) << std::endl;
+    #endif
+}
+
+void RISCAL_CPU::op_jump_lt_imm(cpu_word data) {
+    cpu_halfword jump_location = data & 0xFFFF;
+    /* Get result of comparison */
+    bool zero = flags & FLAGS_MASK_ZERO;
+    bool carry = flags & FLAGS_MASK_CARRY;
+    if (!zero & carry) pc = jump_location - 4;
+
+    #ifdef DEBUG
+        std::cout << "[DBG] JUMP_LT(imm) @" << std::bitset<16>(jump_location) << std::endl;
     #endif
 }
 
