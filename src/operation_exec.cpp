@@ -15,7 +15,7 @@ void RISCAL_CPU::op_nop(cpu_word data) {
 
 void RISCAL_CPU::op_return(cpu_word data) {
     pc = rp; /* Return to location in return pointer */
-    rp = 0x00000000; /* Reset return pointer */
+    rp = 0; /* Reset return pointer */
     #ifdef DEBUG
         std::cout << "[DBG] RETURN" << std::endl;
     #endif
@@ -32,8 +32,14 @@ void RISCAL_CPU::op_fault(cpu_word data) {
 
 void RISCAL_CPU::op_clear(cpu_word data) {
 
+    /* Reset FLAGS register */
+    flags = 0;
+
     uint8_t op_register = data & 0x0000000F;
     reg[op_register] = 0x00000000;
+
+    if (reg[op_register] == 0) flags = flags | FLAGS_MASK_ZERO;
+    if (reg[op_register] >> 31) flags = flags | FLAGS_MASK_SIGN;
 
     #ifdef DEBUG
         std::cout << "[DBG] CLEAR R" << std::bitset<4>(op_register) << std::endl;
@@ -42,8 +48,14 @@ void RISCAL_CPU::op_clear(cpu_word data) {
 
 void RISCAL_CPU::op_increment(cpu_word data) {
 
+    /* Reset FLAGS register */
+    flags = 0;
+
     uint8_t op_register = data & 0x0000000F;
     reg[op_register]++;
+
+    if (reg[op_register] == 0) flags = flags | FLAGS_MASK_ZERO;
+    if (reg[op_register] >> 31) flags = flags | FLAGS_MASK_SIGN;
 
     #ifdef DEBUG
         std::cout << "[DBG] INCREMENT R" << std::bitset<4>(op_register) << std::endl;
@@ -52,8 +64,14 @@ void RISCAL_CPU::op_increment(cpu_word data) {
 
 void RISCAL_CPU::op_decrement(cpu_word data) {
 
+    /* Reset FLAGS register */
+    flags = 0;
+
     uint8_t op_register = data & 0x0000000F;
     reg[op_register]--;
+
+    if (reg[op_register] == 0) flags = flags | FLAGS_MASK_ZERO;
+    if (reg[op_register] >> 31) flags = flags | FLAGS_MASK_SIGN;
 
     #ifdef DEBUG
         std::cout << "[DBG] DECREMENT R" << std::bitset<4>(op_register) << std::endl;
@@ -62,8 +80,14 @@ void RISCAL_CPU::op_decrement(cpu_word data) {
 
 void RISCAL_CPU::op_not(cpu_word data) {
 
+    /* Reset FLAGS register */
+    flags = 0;
+
     uint8_t op_register = data & 0x0000000F;
     reg[op_register] = !reg[op_register];
+
+    if (reg[op_register] == 0) flags = flags | FLAGS_MASK_ZERO;
+    if (reg[op_register] >> 31) flags = flags | FLAGS_MASK_SIGN;
 
     #ifdef DEBUG
         std::cout << "[DBG] NOT R" << std::bitset<4>(op_register) << std::endl;
@@ -234,6 +258,9 @@ void RISCAL_CPU::op_add(cpu_word data) {
 
     reg[op_register_x] = result;
 
+    if (result == 0) flags = flags | FLAGS_MASK_ZERO;
+    if (reg[op_register_x] >> 31) flags = flags | FLAGS_MASK_SIGN;
+
     #ifdef DEBUG
         std::cout << "[DBG] ADD R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
     #endif
@@ -252,6 +279,9 @@ void RISCAL_CPU::op_subtract(cpu_word data) {
     cpu_word result = x - y;
 
     reg[op_register_x] = result;
+
+    if (result == 0) flags = flags | FLAGS_MASK_ZERO;
+    if (reg[op_register_x] >> 31) flags = flags | FLAGS_MASK_SIGN;
 
     #ifdef DEBUG
         std::cout << "[DBG] SUB R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
@@ -272,6 +302,9 @@ void RISCAL_CPU::op_or(cpu_word data) {
 
     reg[op_register_x] = result;
 
+    if (result == 0) flags = flags | FLAGS_MASK_ZERO;
+    if (reg[op_register_x] >> 31) flags = flags | FLAGS_MASK_SIGN;
+
     #ifdef DEBUG
         std::cout << "[DBG] OR R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
     #endif
@@ -290,6 +323,9 @@ void RISCAL_CPU::op_and(cpu_word data) {
     cpu_word result = x & y;
 
     reg[op_register_x] = result;
+
+    if (result == 0) flags = flags | FLAGS_MASK_ZERO;
+    if (reg[op_register_x] >> 31) flags = flags | FLAGS_MASK_SIGN;
 
     #ifdef DEBUG
         std::cout << "[DBG] AND R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
@@ -310,6 +346,9 @@ void RISCAL_CPU::op_xor(cpu_word data) {
 
     reg[op_register_x] = result;
 
+    if (result == 0) flags = flags | FLAGS_MASK_ZERO;
+    if (reg[op_register_x] >> 31) flags = flags | FLAGS_MASK_SIGN;
+
     #ifdef DEBUG
         std::cout << "[DBG] XOR R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
     #endif
@@ -329,6 +368,9 @@ void RISCAL_CPU::op_shift_left(cpu_word data) {
 
     reg[op_register_x] = result;
 
+    if (result == 0) flags = flags | FLAGS_MASK_ZERO;
+    if (reg[op_register_x] >> 31) flags = flags | FLAGS_MASK_SIGN;
+
     #ifdef DEBUG
         std::cout << "[DBG] SHIFT_LEFT R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
     #endif
@@ -347,6 +389,9 @@ void RISCAL_CPU::op_shift_right(cpu_word data) {
     cpu_word result = x >> y;
 
     reg[op_register_x] = result;
+
+    if (result == 0) flags = flags | FLAGS_MASK_ZERO;
+    if (reg[op_register_x] >> 31) flags = flags | FLAGS_MASK_SIGN;
 
     #ifdef DEBUG
         std::cout << "[DBG] SHIFT_RIGHT R" << std::bitset<4>(op_register_x) << ", R" << std::bitset<4>(op_register_y) << std::endl;
