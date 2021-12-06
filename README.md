@@ -11,7 +11,7 @@ RISCAL is a 32-bit custom instruction set architecture virtual machine. It is in
 * 32-bit, fixed-length instruction set
 * 16 General-purpose registers
 * FLAGS, stack pointer, return pointer registers
-* 65536 words of program memory, can be extended to 2^16 bytes
+* 65536 words of program memory, can be extended to 2^32 bytes
 * Ability to set up and leverage a return stack to send and retrieve data from RISCAL after exit
 
 ## Getting Started
