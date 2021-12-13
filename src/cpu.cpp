@@ -108,8 +108,9 @@ bool RISCAL_CPU::execute_instruction() {
 
     if (opcode == FAULT) {
         op_fault(data);
-        return true;
     }
+
+    if (error) return true;
 
     if(op_function_map.find(opcode) == op_function_map.end()) {
         #ifdef DEBUG

@@ -97,6 +97,17 @@ void RISCAL_CPU::op_not(cpu_word data) {
 void RISCAL_CPU::op_push_word(cpu_word data) {
     uint8_t op_register = data & 0x0000000F;
     cpu_word push_data = reg[op_register];
+
+    /* Overflow */
+    if (sp > RETURN_STACK_SIZE - sizeof(cpu_word)) {
+        #ifdef DEBUG
+        std::cout << "[DBG] Stack overflow. Faulting." << std::endl;
+        #endif
+        op_fault(data);
+        return;
+    }
+
+
     memcpy(return_stack + sp, &push_data, sizeof(cpu_word));
     sp = sp + sizeof(cpu_word); /* Increase SP 4 for pushing word */
     #ifdef DEBUG
@@ -106,6 +117,16 @@ void RISCAL_CPU::op_push_word(cpu_word data) {
 
 void RISCAL_CPU::op_pop_word(cpu_word data) {
     uint8_t op_register = data & 0x0000000F;
+
+     /* Underflow */
+    if (sp < sizeof(cpu_word)) {
+        #ifdef DEBUG
+        std::cout << "[DBG] Stack underflow. Faulting." << std::endl;
+        #endif
+        op_fault(data);
+        return;
+    }
+
     sp = sp - sizeof(cpu_word); /* Decrease SP 4 for popping word */
     memcpy(&reg[op_register], return_stack + sp, sizeof(cpu_word));
     memset(return_stack + sp, 0, sizeof(cpu_word)); /* Clear popped data */
@@ -117,6 +138,16 @@ void RISCAL_CPU::op_pop_word(cpu_word data) {
 void RISCAL_CPU::op_push_byte(cpu_word data) {
     uint8_t op_register = data & 0x0000000F;
     cpu_byte push_data = reg[op_register] & 0xFF;
+
+    /* Overflow */
+    if (sp > RETURN_STACK_SIZE - sizeof(cpu_byte)) {
+        #ifdef DEBUG
+        std::cout << "[DBG] Stack overflow. Faulting." << std::endl;
+        #endif
+        op_fault(data);
+        return;
+    }
+
     memcpy(return_stack + sp, &push_data, sizeof(cpu_byte));
     sp = sp + sizeof(cpu_byte); /* Increase SP 1 for pushing byte */
     #ifdef DEBUG
@@ -126,6 +157,16 @@ void RISCAL_CPU::op_push_byte(cpu_word data) {
 
 void RISCAL_CPU::op_pop_byte(cpu_word data) {
     uint8_t op_register = data & 0x0000000F;
+
+    /* Underflow */
+    if (sp < sizeof(cpu_byte)) {
+        #ifdef DEBUG
+        std::cout << "[DBG] Stack underflow. Faulting." << std::endl;
+        #endif
+        op_fault(data);
+        return;
+    }
+
     sp = sp - sizeof(cpu_byte); /* Decrease SP 1 for popping word */
     memcpy(&reg[op_register], return_stack + sp, sizeof(cpu_byte));
     memset(return_stack + sp, 0, sizeof(cpu_byte)); /* Clear popped data */
