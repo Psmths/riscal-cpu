@@ -1,11 +1,14 @@
-# RISCAL CPU
+<p align="center">
+  <img class='center' width=200 src='doc/media/rascal.PNG'><br>
+  <h2 align="center">RISCAL CPU</h2>
+</p>
 
-
-
-![](https://img.shields.io/github/license/Psmths/riscal-cpu.svg)
-![](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
-![](https://github.com/Psmths/riscal-cpu/workflows/CodeQL/badge.svg)
-![](https://github.com/Psmths/riscal-cpu/actions/workflows/c-cpp.yml/badge.svg)
+<p align="center">
+  <img src="https://img.shields.io/github/license/Psmths/riscal-cpu.svg">
+  <img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg">
+  <img src="https://github.com/Psmths/riscal-cpu/workflows/CodeQL/badge.svg">
+  <img src="https://github.com/Psmths/riscal-cpu/actions/workflows/c-cpp.yml/badge.svg">
+</p>
 
 RISCAL is a 32-bit custom instruction set architecture virtual machine. It is intended to be used for learning/research purposes. In a nutshell, RISCAL provides:
 
@@ -15,7 +18,7 @@ RISCAL is a 32-bit custom instruction set architecture virtual machine. It is in
 * 65536 words of program memory, can be extended to 2^32 bytes
 * Ability to set up and leverage a return stack to send and retrieve data from RISCAL after exit
 
-## Getting Started
+.. topic:: Getting Started
 
 This repo comes preloaded with several examples. To build the examples:
 ```
